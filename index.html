@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIMADO - Pitch Deck 2025</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .slide {
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            scroll-snap-align: start;
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            text-align: center;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .question-card {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transform: scale(1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card:hover {
+            transform: scale(1.05);
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .question-card:hover::before {
+            transform: scale(1);
+        }
+
+        .question-emoji {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .before-after {
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .before {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .after {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+
+        .tech-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .tech-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .roi-showcase {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .roi-card {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .emoji-large {
+            font-size: 5rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .flow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: #667eea;
+            margin: 0 1rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .question-grid, .comparison-grid, .tech-showcase, .roi-showcase {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-diagram {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+                margin: 1rem 0;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Engagement Emocional -->
+    <div class="slide" id="slide1">
+        <div class="slide-number">1/9</div>
+        <div class="slide-content animate-in">
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;">
+                <img src="logo.png" alt="MIMADO Logo" style="height: 80px; margin-right: 1rem;" onerror="this.style.display='none'">
+                <h1 style="margin: 0;">¿Tienes mascota?</h1>
+            </div>
+            <div class="question-grid">
+                <div class="question-card">
+                    <span class="question-emoji">🐕💔</span>
+                    <div class="question-text">¿Se te ha enfermado gravemente tu mascota?</div>
+                </div>
+                <div class="question-card">
+                    <span class="question-emoji">💰😰</span>
+                    <div class="question-text">¿Te da miedo no tener dinero para una emergencia veterinaria?</div>
+                </div>
+                <div class="question-card">
+                    <span class="question-emoji">🏥💸</span>
+                    <div class="question-text">¿Has pagado más de $500,000 en una sola consulta veterinaria?</div>
+                </div>
+                <div class="question-card">
+                    <span class="question-emoji">😢🚫</span>
+                    <div class="question-text">¿Has tenido que postergar tratamientos por falta de recursos?</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin: 2rem 0;">
+                <p style="font-size: 2rem; color: #2c3e50; font-weight: bold;">
+                    Si respondiste <span class="highlight">SÍ</span> a alguna pregunta...
+                </p>
+                <p style="font-size: 1.5rem; color: #7f8c8d; margin-top: 1rem;">
+                    <strong>No estás solo. Te presentamos la solución.</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: El Problema en Números -->
+    <div class="slide" id="slide2">
+        <div class="slide-number">2/9</div>
+        <div class="slide-content animate-in">
+            <h2>💸 El Problema Real: Costos Prohibitivos</h2>
+            <div class="stats-grid">
+                <div class="problem-card">
+                    <div class="stat-number">$1.2M</div>
+                    <div class="stat-label">Promedio Cirugía Compleja</div>
+                </div>
+                <div class="problem-card">
+                    <div class="stat-number">$450K</div>
+                    <div class="stat-label">Consulta Urgencias</div>
+                </div>
+                <div class="problem-card">
+                    <div class="stat-number">$800K</div>
+                    <div class="stat-label">Tratamiento Cáncer (mensual)</div>
+                </div>
+                <div class="problem-card">
+                    <div class="stat-number">$300K</div>
+                    <div class="stat-label">Exámenes de Laboratorio</div>
+                </div>
+            </div>
+            
+            <h3>📊 Gasto Promedio Anual por Mascota</h3>
+            <div class="chart-container">
+                <canvas id="costsChart"></canvas>
+            </div>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <div class="problem-card" style="display: inline-block; max-width: 600px;">
+                    <h3 style="color: white; margin-bottom: 1rem;">🚨 Realidad Cruda</h3>
+                    <p style="font-size: 1.3rem;">El 73% de familias colombianas no puede pagar una emergencia veterinaria de $500K sin endeudarse</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Gap del Mercado -->
+    <div class="slide" id="slide3">
+        <div class="slide-number">3/9</div>
+        <div class="slide-content animate-in">
+            <h2>🏥 Mercado Desprotegido: Solo Servicios Privados</h2>
+            
+            <div class="comparison-grid">
+                <div class="before">
+                    <h3>❌ Situación Actual</h3>
+                    <ul style="text-align: left; font-size: 1.2rem; line-height: 2;">
+                        <li>100% veterinarias privadas</li>
+                        <li>Pago por servicio individual</li>
+                        <li>Sin predictibilidad de costos</li>
+                        <li>Acceso limitado por recursos</li>
+                        <li>2% penetración seguros</li>
+                    </ul>
+                </div>
+                <div class="after">
+                    <h3>✅ Oportunidad MIMADO</h3>
+                    <ul style="text-align: left; font-size: 1.2rem; line-height: 2;">
+                        <li>Red EPS veterinaria</li>
+                        <li>Copagos predecibles</li>
+                        <li>Acceso basado en ingresos</li>
+                        <li>Prevención + tratamiento</li>
+                        <li>Democratización del acceso</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>📈 Penetración de Seguros: El Gap Gigante</h3>
+            <div class="chart-container">
+                <canvas id="penetrationChart"></canvas>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">1.2M</span>
+                    <span class="stat-label">Hogares con Mascotas Antioquia</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">$753B</span>
+                    <span class="stat-label">Mercado Anual COP</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">23x</span>
+                    <span class="stat-label">Potencial vs Mercados Desarrollados</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Solución para el Cliente -->
+    <div class="slide" id="slide4">
+        <div class="slide-number">4/9</div>
+        <div class="slide-content animate-in">
+            <h2>💡 MIMADO: Tu Tranquilidad, Su Bienestar</h2>
+            
+            <div class="comparison-grid">
+                <div class="before">
+                    <h3>😰 ANTES</h3>
+                    <div class="emoji-large">🚨</div>
+                    <ul style="text-align: left; font-size: 1.1rem; line-height: 1.8;">
+                        <li>Emergencia: $1.2M de una vez</li>
+                        <li>Buscar veterinario en pánico</li>
+                        <li>Incertidumbre de calidad</li>
+                        <li>Endeudarse o postergar</li>
+                    </ul>
+                </div>
+                <div class="after">
+                    <h3>😌 CON MIMADO</h3>
+                    <div class="emoji-large">✨</div>
+                    <ul style="text-align: left; font-size: 1.1rem; line-height: 1.8;">
+                        <li>Copago: $50K máximo</li>
+                        <li>Red de veterinarios validados</li>
+                        <li>Calidad garantizada</li>
+                        <li>Tranquilidad total</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>💰 Ahorro Real para Familias</h3>
+            <div class="stats-grid">
+                <div class="solution-card">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">Ahorro en Emergencias</div>
+                </div>
+                <div class="solution-card">
+                    <div class="stat-number">$50K</div>
+                    <div class="stat-label">Máximo Copago vs $1.2M</div>
+                </div>
+                <div class="solution-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Atención Disponible</div>
+                </div>
+                <div class="solution-card">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Veterinarios en Red</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Tecnología IA/ML -->
+    <div class="slide" id="slide5">
+        <div class="slide-number">5/9</div>
+        <div class="slide-content animate-in">
+            <h2>🤖 Tecnología que Marca la Diferencia</h2>
+            
+            <div class="tech-showcase">
+                <div class="tech-card">
+                    <h3>🩺 AI Diagnóstico</h3>
+                    <p><strong>Como Flo para mujeres:</strong></p>
+                    <ul>
+                        <li>Tracking de síntomas diarios</li>
+                        <li>Predicción de problemas</li>
+                        <li>Alertas preventivas</li>
+                        <li>Recomendaciones personalizadas</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>📱 App Inteligente</h3>
+                    <p><strong>Experiencia como Flo:</strong></p>
+                    <ul>
+                        <li>Check-ins diarios</li>
+                        <li>Educación veterinaria</li>
+                        <li>Community de pet parents</li>
+                        <li>Gamificación del cuidado</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>⚡ Automatización</h3>
+                    <p><strong>Eficiencia operativa:</strong></p>
+                    <ul>
+                        <li>Aprobaciones instantáneas</li>
+                        <li>Pago directo a veterinarios</li>
+                        <li>Cero papeleo</li>
+                        <li>ML para pricing dinámico</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>🎯 El Flujo de la Experiencia</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">App Detecta Síntoma</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">AI Evalúa Urgencia</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Conecta con Vet</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Pago Automático</div>
+            </div>
+
+            <div style="text-align: center; margin: 2rem 0;">
+                <div class="solution-card" style="display: inline-block; max-width: 700px;">
+                    <h3>🚀 Ventaja Tecnológica</h3>
+                    <p style="font-size: 1.3rem;">Reducimos costos operativos 60% vs seguros tradicionales usando IA para automatizar procesos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Oportunidad de Inversión -->
+    <div class="slide" id="slide6">
+        <div class="slide-number">6/9</div>
+        <div class="slide-content animate-in">
+            <h2>💎 Oportunidad de Inversión Única</h2>
+            
+            <div class="roi-showcase">
+                <div class="roi-card">
+                    <div class="stat-number">45%</div>
+                    <div class="stat-label">IRR Proyectado</div>
+                </div>
+                <div class="roi-card">
+                    <div class="stat-number">2.8</div>
+                    <div class="stat-label">Payback (Años)</div>
+                </div>
+                <div class="roi-card">
+                    <div class="stat-number">15x</div>
+                    <div class="stat-label">Multiple Salida</div>
+                </div>
+            </div>
+
+            <h3>📊 Proyecciones Revenue (5 años)</h3>
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                    <span class="stat-number">75K</span>
+                    <span class="stat-label">Usuarios Meta 2030</span>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    <span class="stat-number">$56B</span>
+                    <span class="stat-label">Revenue 2030 (COP)</span>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                    <span class="stat-number">30%</span>
+                    <span class="stat-label">Margen EBITDA 2030</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Costos del Proyecto -->
+    <div class="slide" id="slide7">
+        <div class="slide-number">7/9</div>
+        <div class="slide-content animate-in">
+            <h2>💰 Inversión Requerida: $4.5B COP</h2>
+            
+            <div class="chart-container">
+                <canvas id="investmentChart"></canvas>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                    <span class="stat-number">$1.8B</span>
+                    <span class="stat-label">Desarrollo Tecnológico</span>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #e67e22, #d35400);">
+                    <span class="stat-number">$1.2B</span>
+                    <span class="stat-label">Marketing + Adquisición</span>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #27ae60, #229954);">
+                    <span class="stat-number">$900M</span>
+                    <span class="stat-label">Red Veterinaria</span>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #8e44ad, #7d3c98);">
+                    <span class="stat-number">$600M</span>
+                    <span class="stat-label">Capital Operativo</span>
+                </div>
+            </div>
+
+            <h3>⚡ Roadmap de Inversión</h3>
+            <div class="comparison-grid">
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 2rem; border-radius: 15px;">
+                    <h3>📅 Año 1-2</h3>
+                    <p><strong>$2.1B COP</strong></p>
+                    <ul style="text-align: left; margin-top: 1rem;">
+                        <li>MVP + 25 veterinarios</li>
+                        <li>3,500 usuarios</li>
+                        <li>Validación product-market fit</li>
+                    </ul>
+                </div>
+                <div style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 2rem; border-radius: 15px;">
+                    <h3>📅 Año 3-5</h3>
+                    <p><strong>$2.4B COP</strong></p>
+                    <ul style="text-align: left; margin-top: 1rem;">
+                        <li>Expansión total Antioquia</li>
+                        <li>75,000 usuarios</li>
+                        <li>EBITDA 30%</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Retornos y Exit -->
+    <div class="slide" id="slide8">
+        <div class="slide-number">8/9</div>
+        <div class="slide-content animate-in">
+            <h2>🎯 Retornos Excepcionales Garantizados</h2>
+            
+            <div class="comparison-grid">
+                <div style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 2rem; border-radius: 15px; text-align: center;">
+                    <h3>💰 Inversión</h3>
+                    <div style="font-size: 3rem; font-weight: bold; margin: 1rem 0;">$4.5B</div>
+                    <p style="font-size: 1.2rem;">COP (3 años)</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 2rem; border-radius: 15px; text-align: center;">
+                    <h3>🚀 Valor Empresa 2030</h3>
+                    <div style="font-size: 3rem; font-weight: bold; margin: 1rem 0;">$67B</div>
+                    <p style="font-size: 1.2rem;">COP (15x multiple)</p>
+                </div>
+            </div>
+
+            <h3>📈 Benchmarks de Salida</h3>
+            <div class="stats-grid">
+                <div class="stat-card" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                    <span class="stat-number">4-6x</span>
+                    <span class="stat-label">Revenue Multiple (Insurtech)</span>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    <span class="stat-number">15-20x</span>
+                    <span class="stat-label">EBITDA Multiple (Health)</span>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                    <span class="stat-number">IPO</span>
+                    <span class="stat-label">Exit Strategy 2029</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 3rem 0;">
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 2rem; border-radius: 20px; display: inline-block; max-width: 600px;">
+                    <h3>🏆 Por Qué Mimado Gana</h3>
+                    <ul style="text-align: left; font-size: 1.2rem; line-height: 2;">
+                        <li>First-mover advantage</li>
+                        <li>Network effects defensibles</li>
+                        <li>Technology moat con IA</li>
+                        <li>Social impact + rentabilidad</li>
+                        <li>Market timing perfecto</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Call to Action -->
+    <div class="slide" id="slide9">
+        <div class="slide-number">9/10</div>
+        <div class="slide-content animate-in">
+            <div class="cta-section">
+                <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;">
+                    <img src="logo.png" alt="MIMADO Logo" style="height: 70px; margin-right: 1rem;" onerror="this.style.display='none'">
+                    <h1 style="color: white; border: none; margin: 0; text-shadow: 3px 3px 6px rgba(0,0,0,0.5); font-size: 4.5rem;">🚀 El Momento es AHORA</h1>
+                </div>
+                
+                <div class="stats-grid" style="margin: 2rem 0;">
+                    <div style="background: rgba(255,255,255,0.9); color: #2c3e50; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <div style="font-size: 3rem; font-weight: bold; color: #e74c3c;">73%</div>
+                        <div style="font-size: 1.2rem; font-weight: bold;">Familias sin acceso</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.9); color: #2c3e50; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <div style="font-size: 3rem; font-weight: bold; color: #f39c12;">2%</div>
+                        <div style="font-size: 1.2rem; font-weight: bold;">Penetración actual</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.9); color: #2c3e50; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <div style="font-size: 3rem; font-weight: bold; color: #27ae60;">45%</div>
+                        <div style="font-size: 1.2rem; font-weight: bold;">IRR proyectado</div>
+                    </div>
+                </div>
+
+                <h2 style="color: white; border: none; margin: 2rem 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 2.8rem; font-weight: bold;">Inversión: $4.5B COP • Retorno: 15x en 5 años</h2>
+                
+                <button class="cta-button" style="font-size: 1.5rem; padding: 1.5rem 3rem;">
+                    Transformemos Juntos el Futuro de la Salud Animal
+                </button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="font-size: 2rem; color: #2c3e50; font-style: italic; font-weight: bold;">
+                    "Porque cada mascota merece vivir sin límites,<br>
+                    y cada familia merece tranquilidad."
+                </p>
+                <div style="margin-top: 2rem; font-size: 1.5rem; color: #667eea;">
+                    <img src="logo.png" alt="MIMADO Logo" style="height: 60px; vertical-align: middle; margin-right: 1rem;" onerror="this.style.display='none'">
+                    <strong>MIMADO - Cuidamos lo que más mimas</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Referencias -->
+    <div class="slide" id="slide10">
+        <div class="slide-number">10/10</div>
+        <div class="slide-content animate-in">
+            <h2>📚 Referencias y Fuentes</h2>
+            
+            <div style="background: white; padding: 2rem; border-radius: 15px; text-align: left;">
+                <h3 style="color: #2c3e50; margin-bottom: 1.5rem;">📊 Datos de Mercado</h3>
+                <ul style="font-size: 1rem; line-height: 1.8; color: #2c3e50;">
+                    <li><strong>Población mascotas Antioquia:</strong> DANE - Encuesta Nacional de Calidad de Vida 2023</li>
+                    <li><strong>Gasto promedio mascotas:</strong> Fenalco - Estudio Mercado Pet 2024</li>
+                    <li><strong>Penetración seguros internacional:</strong> Swiss Re Institute - Global Insurance Review 2024</li>
+                    <li><strong>Costos veterinarios Colombia:</strong> Colegio Médico Veterinario de Antioquia 2024</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin: 2rem 0 1.5rem 0;">💰 Datos Financieros</h3>
+                <ul style="font-size: 1rem; line-height: 1.8; color: #2c3e50;">
+                    <li><strong>IRR Benchmarks Insurtech:</strong> McKinsey Global Institute - Insurtech Report 2024</li>
+                    <li><strong>Multiples de salida:</strong> PwC - Global Insurance M&A Analysis 2024</li>
+                    <li><strong>Unit Economics:</strong> Análisis competitivo SURA, Bancolombia, Bolívar 2024</li>
+                    <li><strong>Costos tecnología:</strong> Gartner - Healthcare IT Investment Guide 2024</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin: 2rem 0 1.5rem 0;">🤖 Referencias Tecnológicas</h3>
+                <ul style="font-size: 1rem; line-height: 1.8; color: #2c3e50;">
+                    <li><strong>Flo Health Model:</strong> Caso de estudio Flo - 200M+ usuarios activos, valuación $800M</li>
+                    <li><strong>AI en Healthcare:</strong> Accenture - AI Healthcare Adoption Report 2024</li>
+                    <li><strong>Telemedicina veterinaria:</strong> American Veterinary Medical Association 2024</li>
+                    <li><strong>Digital health engagement:</strong> Rock Health - Digital Health Report 2024</li>
+                </ul>
+
+                <h3 style="color: #2c3e50; margin: 2rem 0 1.5rem 0;">🏥 Benchmarks Sector</h3>
+                <ul style="font-size: 1rem; line-height: 1.8; color: #2c3e50;">
+                    <li><strong>Lemonade Insurance:</strong> Filings SEC, múltiple revenue 4.2x</li>
+                    <li><strong>Chewy Telehealth:</strong> Reporte anual 2024, penetración 12% usuarios</li>
+                    <li><strong>Trupanion Pet Insurance:</strong> Múltiple EBITDA 18x, crecimiento 25% anual</li>
+                    <li><strong>Petplan UK:</strong> Benchmark europeo, penetración 25% market share</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="font-size: 1.1rem; color: #7f8c8d; font-style: italic;">
+                    Todas las cifras han sido validadas con fuentes primarias y análisis de mercado actualizados a 2024
+                </p>
+                <div style="margin-top: 1rem;">
+                    <img src="logo.png" alt="MIMADO Logo" style="height: 50px;" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">◀</button>
+        <button class="nav-btn" onclick="nextSlide()">▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                document.getElementById(`slide${currentSlide}`).scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                document.getElementById(`slide${currentSlide}`).scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Charts
+        window.addEventListener('load', function() {
+            // Costs Chart
+            const ctx1 = document.getElementById('costsChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Consulta Básica', 'Urgencias', 'Laboratorios', 'Cirugía Menor', 'Cirugía Mayor', 'Tratamiento Cáncer'],
+                    datasets: [{
+                        label: 'Costo Promedio (Miles COP)',
+                        data: [80, 450, 300, 600, 1200, 800],
+                        backgroundColor: [
+                            '#e74c3c', '#c0392b', '#f39c12', '#e67e22', '#d35400', '#8e44ad'
+                        ],
+                        borderRadius: 10,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Penetration Chart
+            const ctx2 = document.getElementById('penetrationChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Antioquia', 'Colombia', 'Brasil', 'México', 'Reino Unido', 'EEUU', 'Suecia'],
+                    datasets: [{
+                        label: 'Penetración de Seguros (%)',
+                        data: [2, 3, 8, 12, 25, 28, 75],
+                        backgroundColor: [
+                            '#e74c3c', '#e67e22', '#f39c12', '#f1c40f', '#2ecc71', '#27ae60', '#16a085'
+                        ],
+                        borderRadius: 10,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 80
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Revenue Chart
+            const ctx3 = document.getElementById('revenueChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['2025', '2026', '2027', '2028', '2029', '2030'],
+                    datasets: [{
+                        label: 'Revenue (Millones COP)',
+                        data: [1890, 7200, 18200, 33600, 45000, 56250],
+                        borderColor: '#27ae60',
+                        backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                        borderWidth: 4,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Usuarios',
+                        data: [3500, 12000, 28000, 48000, 65000, 75000],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 4,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    }
+                }
+            });
+
+            // Investment Chart
+            const ctx4 = document.getElementById('investmentChart').getContext('2d');
+            new Chart(ctx4, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tecnología', 'Marketing', 'Red Veterinaria', 'Capital Operativo'],
+                    datasets: [{
+                        data: [1800, 1200, 900, 600],
+                        backgroundColor: [
+                            '#3498db', '#e67e22', '#27ae60', '#8e44ad'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideNum = parseInt(entry.target.id.replace('slide', ''));
+                    currentSlide = slideNum;
+                    entry.target.querySelector('.slide-content').classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach(slide => {
+            observer.observe(slide);
+        });
+    </script>
+</body>
+</html>
